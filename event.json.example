@@ -1,0 +1,11 @@
+{
+  "apiType": "",
+  "apiKey": "",
+  "postParams": {
+    "id": "",
+    "key": "",
+    "vars": {
+      "test": "true"
+    }
+  }
+}
