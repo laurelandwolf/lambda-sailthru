@@ -22,7 +22,8 @@ const reportError = (err) => {
   }
 }
 
-exports.handler = (event, context) => {
+exports.handler = (request, context) => {
+  const event = request.body
   if (event.apiKey === process.env['SAILTHRU_LAMBDA_KEY']) {
     sailThru.apiPost(event.apiType, event.postParams, (err, response) => {
       if (response.error) {
