@@ -41,3 +41,35 @@ If you installed node-lambda there are two options availiable
 2. `node-lambda deploy`
 
     Automatically deploys the function to your AWS Lambda server. Requires AWS keys in .env to be updated with your credentials. See [node-lambda documentation](https://github.com/motdotla/node-lambda) for more configuration options
+
+## AWS API Gateway Configuration
+Incoming POST requests to Amazon API Gateway require configuring the endpoint's Integration Request. The following is an example mapping for POST requests with `Content-Type: application/json`
+```
+#set($allParams = $input.params())
+{
+"body" : $input.json('$'),
+"params" : {
+#foreach($type in $allParams.keySet())
+    #set($params = $allParams.get($type))
+"$type" : {
+    #foreach($paramName in $params.keySet())
+    "$paramName" : "$util.escapeJavaScript($params.get($paramName))"
+        #if($foreach.hasNext),#end
+    #end
+}
+    #if($foreach.hasNext),#end
+#end
+},
+"context" : {
+    "account-id" : "$context.identity.accountId",
+    "api-id" : "$context.apiId",
+    "api-key" : "$context.identity.apiKey",
+    "http-method" : "$context.httpMethod",
+    "user" : "$context.identity.user",
+    "user-agent" : "$context.identity.userAgent",
+    "request-id" : "$context.requestId",
+    "resource-id" : "$context.resourceId",
+    "resource-path" : "$context.resourcePath"
+    }
+}
+```
