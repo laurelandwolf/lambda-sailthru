@@ -39,14 +39,27 @@ exports.handler = (request, context) => {
   const event = request.body
   if (event.apiKey === process.env['SAILTHRU_LAMBDA_KEY']) {
     const sailThru = buildConnection(event.sailthruEnv)
-    sailThru.apiPost(event.apiType, event.postParams, (err, response) => {
-      if (response.error) {
-        reportError("SailThru API Error: " + response.error + " - " + response.errormsg)
-      }
-      else if (err) {
-        reportError("SailThru API Error: " + JSON.stringify(err))
-      }
-    })
+
+    if (event.apiType === 'send') {
+      sailThru.send(request.template, request.email, options, (err, response) => {
+        if (response.error) {
+          reportError("SailThru API Error: " + response.error + " - " + response.errormsg)
+        }
+        else if (err) {
+          reportError("SailThru API Error: " + JSON.stringify(err))
+        }
+      })
+    }
+    else {
+      sailThru.apiPost(event.apiType, event.postParams, (err, response) => {
+        if (response.error) {
+          reportError("SailThru API Error: " + response.error + " - " + response.errormsg)
+        }
+        else if (err) {
+          reportError("SailThru API Error: " + JSON.stringify(err))
+        }
+      })
+    }
   }
   else {
       reportError('Invalid API Key')
