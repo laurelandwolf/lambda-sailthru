@@ -1,11 +1,5 @@
 'use strict'
 
-const sailThru = require('sailthru-client').createSailthruClient(
-    process.env['SAILTHRU_API_KEY'],
-    process.env['SAILTHRU_API_SECRET']
-  )
-sailThru.enableLogging()
-
 let airbrake
 if (process.env['AIRBRAKE_PROJECT_ID'] && process.env['AIRBAKE_PROJECT_KEY']) {
   airbrake = require('airbrake').createClient(
@@ -22,9 +16,29 @@ const reportError = (err) => {
   }
 }
 
+const buildConnection = (envType) => {
+
+  let apiKey = process.env['SAILTHRU_API_KEY']
+  let apiSecret = process.env['SAILTHRU_API_SECRET']
+
+  if (envType === 'development' || envType === 'staging') {
+    apiKey = process.env['SAILTHRU_DEV_API_KEY']
+    apiSecret = process.env['SAILTHRU_DEV_API_SECRET']
+  }
+
+  const sailThru = require('sailthru-client').createSailthruClient(
+      apiKey,
+      apiSecret
+    )
+  sailThru.enableLogging()
+  return sailThru
+}
+
 exports.handler = (request, context) => {
+
   const event = request.body
   if (event.apiKey === process.env['SAILTHRU_LAMBDA_KEY']) {
+    const sailThru = buildConnection(event.sailthruEnv)
     sailThru.apiPost(event.apiType, event.postParams, (err, response) => {
       if (response.error) {
         reportError("SailThru API Error: " + response.error + " - " + response.errormsg)
