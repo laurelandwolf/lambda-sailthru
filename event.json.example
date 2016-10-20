@@ -1,11 +1,14 @@
 {
-  "apiType": "",
-  "apiKey": "",
-  "postParams": {
-    "id": "",
-    "key": "",
-    "vars": {
-      "test": "true"
+  "body": {
+    "apiType": "",
+    "apiKey": "",
+    "sailthruEnv": "",
+    "postParams": {
+      "id": "",
+      "key": "",
+      "vars": {
+        "test": "true"
+      }
     }
   }
 }

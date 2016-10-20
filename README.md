@@ -33,7 +33,7 @@ The following is an example of a JSON object lambda-sailthru expects. You will a
 `postParams`: JS object that provides required Sailthru API parameters. See [Sailthru API](https://getstarted.sailthru.com/new-for-developers-overview/api/api-overview/) documentation for examples.
 
 ## Deployment
-If you installed node-lambda there are two options availiable
+If you installed node-lambda there are two options available
 
 1. `node-lambda package`
 
