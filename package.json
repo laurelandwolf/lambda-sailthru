@@ -1,6 +1,6 @@
 {
   "name": "lambda-sailthru",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "AWS Lambda function to dispatch POST API events to SailThru",
   "main": "index.js",
   "dependencies": {
